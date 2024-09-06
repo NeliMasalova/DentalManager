@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="create_database" author="neli">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS dental_clinic;
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_sequence_patient_id" author="neli">
+        <sql schemaName="dental_clinic">
+            CREATE SEQUENCE patient_id_seq;
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_patient_table" author="neli">
+        <createTable tableName="patient" schemaName="dental_clinic">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="varchar(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birthdate" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="phone" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_sequence_doctor_id" author="neli">
+        <sql schemaName="dental_clinic">
+            CREATE SEQUENCE doctor_id_seq;
+        </sql>
+    </changeSet>
+    <changeSet id="create_doctor_table" author="neli">
+        <createTable tableName="doctor" schemaName="dental_clinic">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="varchar(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="specialty" type="varchar(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_sequence_service_id" author="neli">
+        <sql schemaName="dental_clinic">
+            CREATE SEQUENCE service_id_seq;
+        </sql>
+    </changeSet>
+    <changeSet id="create_service_table" author="neli">
+        <createTable tableName="service" schemaName="dental_clinic">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(160)"> </column>
+            <column name="price" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_sequence_appointment_id" author="neli">
+        <sql schemaName="dental_clinic">
+            CREATE SEQUENCE appointment_id_seq;
+        </sql>
+    </changeSet>
+    <changeSet id="create_appointment_table" author="neli">
+        <createTable tableName="appointment" schemaName="dental_clinic">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(15)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patient_id" type="bigint"> </column>
+            <column name="doctor_id" type="bigint"> </column>
+            <column name="service_id" type="bigint"> </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="appointment" baseColumnNames="patient_id"
+                                 constraintName="appointment_patient_fk" referencedTableName="patient"
+                                 referencedColumnNames="id" baseTableSchemaName="dental_clinic"
+                                 referencedTableSchemaName="dental_clinic"/>
+        <addForeignKeyConstraint baseTableName="appointment" baseColumnNames="doctor_id"
+                                 constraintName="appointment_doctor_fk" referencedTableName="doctor"
+                                 referencedColumnNames="id" baseTableSchemaName="dental_clinic"
+                                 referencedTableSchemaName="dental_clinic"/>
+        <addForeignKeyConstraint baseTableName="appointment" baseColumnNames="service_id"
+                                 constraintName="appointment_service_fk" referencedTableName="service"
+                                 referencedColumnNames="id" baseTableSchemaName="dental_clinic"
+                                 referencedTableSchemaName="dental_clinic"/>
+    </changeSet>
+
+    <changeSet id="create_sequence_payment_id" author="neli">
+        <sql schemaName="dental_clinic">
+            CREATE SEQUENCE payment_id_seq;
+        </sql>
+    </changeSet>
+    <changeSet id="create_payment_table" author="neli">
+        <createTable tableName="payment" schemaName="dental_clinic">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="appointment_id" type="bigint"> </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="payment" baseColumnNames="appointment_id"
+                                 constraintName="payment_appointment_fk" referencedTableName="appointment"
+                                 referencedColumnNames="id" baseTableSchemaName="dental_clinic"
+                                 referencedTableSchemaName="dental_clinic"/>
+    </changeSet>
+</databaseChangeLog>
