@@ -1,30 +1,18 @@
-package pl.pingwit.pingwitdentalmanager.repository.appointment;
+package pl.pingwit.pingwitdentalmanager.controller.appointment;
 
-import jakarta.persistence.*;
+import pl.pingwit.pingwitdentalmanager.repository.appointment.AppointmentStatus;
+import pl.pingwit.pingwitdentalmanager.repository.dental_service.DentalService;
 import pl.pingwit.pingwitdentalmanager.repository.doctor.Doctor;
 import pl.pingwit.pingwitdentalmanager.repository.patient.Patient;
-import pl.pingwit.pingwitdentalmanager.repository.dental_service.DentalService;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "appointment")
-public class Appointment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appointment_id_generator")
-    @Column(name = "id")
+public class AppointmentDto {
     private Long id;
-    @Column(name = "date")
     private LocalDate date;
-    @Column(name = "status")
     private AppointmentStatus appointmentStatus;
-
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
     private Patient patient;
-    @Column(name = "doctor_id")
     private Doctor doctor;
-    @Column(name = "service_id")
     private DentalService dentalService;
 
     public Long getId() {

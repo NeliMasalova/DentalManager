@@ -1,7 +1,6 @@
 package pl.pingwit.pingwitdentalmanager.controller.appointment;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.pingwit.pingwitdentalmanager.service.appointment.AppointmentService;
 
 @RestController
@@ -12,4 +11,21 @@ public class AppointmentController {
     public AppointmentController(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
     }
+//TODO
+//    @GetMapping
+//    public List<AppointmentDto> listAppointments() {
+//        return appointmentService.listAppointments();
+//    }
+
+    @GetMapping("/{id}")
+    public AppointmentDto getAppointmentByPatientId(@PathVariable(name = "id") Long patientId) {
+        return appointmentService.getAppointmentByPatientId(patientId);
+    }
+
+    @PostMapping
+    public Long createAppointment(@RequestBody AppointmentDto inputDto) {
+        return appointmentService.createAppointment(inputDto);
+    }
+
+    //TODO deleteAppointment
 }
