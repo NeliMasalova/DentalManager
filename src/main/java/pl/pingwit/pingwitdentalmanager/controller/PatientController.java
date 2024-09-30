@@ -1,7 +1,11 @@
-package pl.pingwit.pingwitdentalmanager.controller.patient;
+package pl.pingwit.pingwitdentalmanager.controller;
 
 import org.springframework.web.bind.annotation.*;
-import pl.pingwit.pingwitdentalmanager.service.patient.PatientService;
+import pl.pingwit.pingwitdentalmanager.dto.CreatePatientInputDto;
+import pl.pingwit.pingwitdentalmanager.dto.PatientDto;
+import pl.pingwit.pingwitdentalmanager.dto.PatientShortDto;
+import pl.pingwit.pingwitdentalmanager.entity.Patient;
+import pl.pingwit.pingwitdentalmanager.service.PatientService;
 
 import java.util.List;
 
@@ -28,5 +32,15 @@ public class PatientController {
     @PostMapping
     public Long createPatient(@RequestBody CreatePatientInputDto inputDto) {
         return patientService.createPatient(inputDto);
+    }
+
+    @PutMapping("/{id}")
+    public void updatePatient(@RequestBody Patient inputDto, @PathVariable(name = "id") Long id) {
+        patientService.updatePatient(id, inputDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletePatient(@PathVariable(name = "id") Long id) {
+        patientService.deletePatient(id);
     }
 }
