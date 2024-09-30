@@ -3,20 +3,14 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="create_database" author="neli">
-        <sql>
-            CREATE SCHEMA IF NOT EXISTS dental_clinic;
-        </sql>
-    </changeSet>
-
     <changeSet id="create_sequence_patient_id" author="neli">
-        <sql schemaName="dental_clinic">
+        <sql>
             CREATE SEQUENCE patient_id_seq;
         </sql>
     </changeSet>
 
     <changeSet id="create_patient_table" author="neli">
-        <createTable tableName="patient" schemaName="dental_clinic">
+        <createTable tableName="patient">
             <column name="id" type="bigint">
                 <constraints primaryKey="true"/>
             </column>
@@ -42,12 +36,12 @@
     </changeSet>
 
     <changeSet id="create_sequence_doctor_id" author="neli">
-        <sql schemaName="dental_clinic">
+        <sql>
             CREATE SEQUENCE doctor_id_seq;
         </sql>
     </changeSet>
     <changeSet id="create_doctor_table" author="neli">
-        <createTable tableName="doctor" schemaName="dental_clinic">
+        <createTable tableName="doctor">
             <column name="id" type="bigint">
                 <constraints primaryKey="true"/>
             </column>
@@ -70,19 +64,19 @@
     </changeSet>
 
     <changeSet id="create_sequence_service_id" author="neli">
-        <sql schemaName="dental_clinic">
+        <sql>
             CREATE SEQUENCE service_id_seq;
         </sql>
     </changeSet>
     <changeSet id="create_service_table" author="neli">
-        <createTable tableName="service" schemaName="dental_clinic">
+        <createTable tableName="service">
             <column name="id" type="bigint">
                 <constraints primaryKey="true"/>
             </column>
             <column name="name" type="varchar(60)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="varchar(160)"> </column>
+            <column name="description" type="varchar(160)"/>
             <column name="price" type="numeric">
                 <constraints nullable="false"/>
             </column>
@@ -90,12 +84,12 @@
     </changeSet>
 
     <changeSet id="create_sequence_appointment_id" author="neli">
-        <sql schemaName="dental_clinic">
+        <sql>
             CREATE SEQUENCE appointment_id_seq;
         </sql>
     </changeSet>
     <changeSet id="create_appointment_table" author="neli">
-        <createTable tableName="appointment" schemaName="dental_clinic">
+        <createTable tableName="appointment">
             <column name="id" type="bigint">
                 <constraints primaryKey="true"/>
             </column>
@@ -105,35 +99,32 @@
             <column name="status" type="varchar(15)">
                 <constraints nullable="false"/>
             </column>
-            <column name="patient_id" type="bigint"> </column>
-            <column name="doctor_id" type="bigint"> </column>
-            <column name="service_id" type="bigint"> </column>
+            <column name="patient_id" type="bigint"/>
+            <column name="doctor_id" type="bigint"/>
+            <column name="service_id" type="bigint"/>
         </createTable>
         <addForeignKeyConstraint baseTableName="appointment" baseColumnNames="patient_id"
                                  constraintName="appointment_patient_fk" referencedTableName="patient"
-                                 referencedColumnNames="id" baseTableSchemaName="dental_clinic"
-                                 referencedTableSchemaName="dental_clinic"/>
+                                 referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="appointment" baseColumnNames="doctor_id"
                                  constraintName="appointment_doctor_fk" referencedTableName="doctor"
-                                 referencedColumnNames="id" baseTableSchemaName="dental_clinic"
-                                 referencedTableSchemaName="dental_clinic"/>
+                                 referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="appointment" baseColumnNames="service_id"
                                  constraintName="appointment_service_fk" referencedTableName="service"
-                                 referencedColumnNames="id" baseTableSchemaName="dental_clinic"
-                                 referencedTableSchemaName="dental_clinic"/>
+                                 referencedColumnNames="id"/>
     </changeSet>
 
     <changeSet id="create_sequence_payment_id" author="neli">
-        <sql schemaName="dental_clinic">
+        <sql>
             CREATE SEQUENCE payment_id_seq;
         </sql>
     </changeSet>
     <changeSet id="create_payment_table" author="neli">
-        <createTable tableName="payment" schemaName="dental_clinic">
+        <createTable tableName="payment">
             <column name="id" type="bigint">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="appointment_id" type="bigint"> </column>
+            <column name="appointment_id" type="bigint"/>
             <column name="date" type="date">
                 <constraints nullable="false"/>
             </column>
@@ -146,7 +137,56 @@
         </createTable>
         <addForeignKeyConstraint baseTableName="payment" baseColumnNames="appointment_id"
                                  constraintName="payment_appointment_fk" referencedTableName="appointment"
-                                 referencedColumnNames="id" baseTableSchemaName="dental_clinic"
-                                 referencedTableSchemaName="dental_clinic"/>
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="create_table_appointment_treatment" author="neli">
+        <createTable tableName="appointment_treatment">
+            <column name="appointment_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="treatment_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="appointment_treatment" baseColumnNames="appointment_id"
+                                 constraintName="fk_appointment_treatment_appointment" referencedTableName="appointment"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="appointment_treatment" baseColumnNames="treatment_id"
+                                 constraintName="fk_appointment_treatment_treatment"
+                                 referencedTableName="service" referencedColumnNames="id"/>
+        <addUniqueConstraint tableName="appointment_treatment" columnNames="appointment_id, treatment_id"
+                             constraintName="uk_appointment_treatment"/>
+    </changeSet>
+
+    <changeSet id="drop_old_sequences" author="neli">
+        <dropSequence sequenceName="patient_id_seq"/>
+        <dropSequence sequenceName="doctor_id_seq"/>
+        <dropSequence sequenceName="service_id_seq"/>
+        <dropSequence sequenceName="appointment_id_seq"/>
+        <dropSequence sequenceName="payment_id_seq"/>
+    </changeSet>
+
+    <changeSet id="update_patient_id_type" author="neli">
+        <modifyDataType tableName="patient" columnName="id" newDataType="BIGSERIAL"/>
+
+    </changeSet>
+
+    <changeSet id="update_doctor_id_type" author="neli">
+        <modifyDataType tableName="doctor" columnName="id" newDataType="BIGSERIAL"/>
+    </changeSet>
+
+    <changeSet id="update_service_id_type" author="neli">
+        <modifyDataType tableName="service" columnName="id" newDataType="BIGSERIAL"/>
+        <modifyDataType tableName="appointment_treatment" columnName="treatment_id" newDataType="BIGSERIAL"/>
+    </changeSet>
+
+    <changeSet id="update_appointment_id_type" author="neli">
+        <modifyDataType tableName="appointment" columnName="id" newDataType="BIGSERIAL"/>
+        <modifyDataType tableName="appointment_treatment" columnName="appointment_id" newDataType="BIGSERIAL"/>
+    </changeSet>
+
+    <changeSet id="update_payment_id_type" author="neli">
+        <modifyDataType tableName="payment" schemaName="public" columnName="id" newDataType="BIGSERIAL"/>
     </changeSet>
 </databaseChangeLog>
