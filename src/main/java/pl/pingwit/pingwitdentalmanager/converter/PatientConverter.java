@@ -1,10 +1,10 @@
-package pl.pingwit.pingwitdentalmanager.converter.pacient;
+package pl.pingwit.pingwitdentalmanager.converter;
 
 import org.springframework.stereotype.Component;
-import pl.pingwit.pingwitdentalmanager.controller.patient.CreatePatientInputDto;
-import pl.pingwit.pingwitdentalmanager.controller.patient.PatientDto;
-import pl.pingwit.pingwitdentalmanager.controller.patient.PatientShortDto;
-import pl.pingwit.pingwitdentalmanager.repository.patient.Patient;
+import pl.pingwit.pingwitdentalmanager.dto.CreatePatientInputDto;
+import pl.pingwit.pingwitdentalmanager.dto.PatientDto;
+import pl.pingwit.pingwitdentalmanager.dto.PatientShortDto;
+import pl.pingwit.pingwitdentalmanager.entity.Patient;
 
 @Component
 public class PatientConverter {

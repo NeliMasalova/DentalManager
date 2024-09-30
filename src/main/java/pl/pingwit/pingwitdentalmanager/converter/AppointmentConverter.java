@@ -1,22 +1,28 @@
 package pl.pingwit.pingwitdentalmanager.converter;
 
-import pl.pingwit.pingwitdentalmanager.controller.appointment.AppointmentDto;
-import pl.pingwit.pingwitdentalmanager.repository.appointment.Appointment;
-import pl.pingwit.pingwitdentalmanager.repository.dental_service.DentalServiceRepository;
-import pl.pingwit.pingwitdentalmanager.repository.doctor.Doctor;
-import pl.pingwit.pingwitdentalmanager.repository.doctor.DoctorRepository;
-import pl.pingwit.pingwitdentalmanager.repository.patient.Patient;
-import pl.pingwit.pingwitdentalmanager.repository.patient.PatientRepository;
-import pl.pingwit.pingwitdentalmanager.repository.dental_service.DentalService;
+import org.springframework.stereotype.Component;
+import pl.pingwit.pingwitdentalmanager.dto.AppointmentDto;
+import pl.pingwit.pingwitdentalmanager.entity.Appointment;
+import pl.pingwit.pingwitdentalmanager.repository.DentalTreatmentRepository;
+import pl.pingwit.pingwitdentalmanager.entity.Doctor;
+import pl.pingwit.pingwitdentalmanager.repository.DoctorRepository;
+import pl.pingwit.pingwitdentalmanager.entity.Patient;
+import pl.pingwit.pingwitdentalmanager.repository.PatientRepository;
+import pl.pingwit.pingwitdentalmanager.entity.DentalTreatment;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Component
 public class AppointmentConverter {
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
-    private final DentalServiceRepository dentalServiceRepository;
-    public AppointmentConverter(PatientRepository patientRepository, DoctorRepository doctorRepository, DentalServiceRepository dentalServiceRepository) {
+    private final DentalTreatmentRepository dentalTreatmentRepository;
+
+    public AppointmentConverter(PatientRepository patientRepository, DoctorRepository doctorRepository, DentalTreatmentRepository dentalTreatmentRepository) {
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
-        this.dentalServiceRepository = dentalServiceRepository;
+        this.dentalTreatmentRepository = dentalTreatmentRepository;
     }
 
     public AppointmentDto mapToDto(Appointment appointment) {
@@ -26,7 +32,9 @@ public class AppointmentConverter {
         dto.setAppointmentStatus(appointment.getAppointmentStatus());
         dto.setPatient(appointment.getPatient());
         dto.setDoctor(appointment.getDoctor());
-        dto.setDentalService(appointment.getDentalService());
+
+        dto.setDentalTreatment(appointment.getDentalTreatments());
+
         return dto;
     }
 
@@ -34,12 +42,17 @@ public class AppointmentConverter {
         Appointment appointment = new Appointment();
         appointment.setDate(inputDto.getDate());
         appointment.setAppointmentStatus(inputDto.getAppointmentStatus());
+
         Patient patient = patientRepository.findById(inputDto.getPatient().getId()).orElseThrow();
         Doctor doctor = doctorRepository.findById(inputDto.getDoctor().getId()).orElseThrow();
-        DentalService dentalService = dentalServiceRepository.findById(inputDto.getDentalService().getId()).orElseThrow();
+
+        Set<DentalTreatment> dentalTreatments = inputDto.getDentalTreatment().stream()
+                .map(treatmentDto -> dentalTreatmentRepository.findById(treatmentDto.getId()).orElseThrow())
+                .collect(Collectors.toSet());
+
         appointment.setPatient(patient);
         appointment.setDoctor(doctor);
-        appointment.setDentalService(dentalService);
+        appointment.setDentalTreatments(dentalTreatments);
 
         return appointment;
     }
