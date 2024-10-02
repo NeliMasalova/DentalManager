@@ -1,11 +1,11 @@
-package pl.pingwit.pingwitdentalmanager.repository.appointment;
+package pl.pingwit.pingwitdentalmanager.entity;
 
 import jakarta.persistence.*;
-import pl.pingwit.pingwitdentalmanager.repository.doctor.Doctor;
-import pl.pingwit.pingwitdentalmanager.repository.patient.Patient;
-import pl.pingwit.pingwitdentalmanager.repository.dental_service.DentalService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "appointment")
@@ -16,16 +16,24 @@ public class Appointment {
     private Long id;
     @Column(name = "date")
     private LocalDate date;
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private AppointmentStatus appointmentStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id")
     private Patient patient;
-    @Column(name = "doctor_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
     private Doctor doctor;
-    @Column(name = "service_id")
-    private DentalService dentalService;
+    @ManyToMany
+    @JoinTable(
+            name = "appointment_treatment",
+            joinColumns = @JoinColumn(name = "appointment_id"),
+            inverseJoinColumns = @JoinColumn(name = "treatment_id")
+    )
+    private Set<DentalTreatment> dentalTreatments = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -67,11 +75,14 @@ public class Appointment {
         this.doctor = doctor;
     }
 
-    public DentalService getDentalService() {
-        return dentalService;
+    public Set<DentalTreatment> getDentalTreatments() {
+        return dentalTreatments;
     }
 
-    public void setDentalService(DentalService dentalService) {
-        this.dentalService = dentalService;
+    public void setDentalTreatments(Set<DentalTreatment> dentalTreatments) {
+        this.dentalTreatments = dentalTreatments;
+    }
+
+    public void setAmount(BigDecimal totalAmount) {
     }
 }

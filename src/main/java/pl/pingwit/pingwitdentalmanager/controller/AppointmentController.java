@@ -33,6 +33,5 @@ public class AppointmentController {
     @DeleteMapping
     public void deleteAppointment(@PathVariable(name = "id") Long id) {
         appointmentService.deleteAppointment(id);
-
     }
 }

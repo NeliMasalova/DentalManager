@@ -1,11 +1,12 @@
-package pl.pingwit.pingwitdentalmanager.controller.appointment;
+package pl.pingwit.pingwitdentalmanager.dto;
 
-import pl.pingwit.pingwitdentalmanager.repository.appointment.AppointmentStatus;
-import pl.pingwit.pingwitdentalmanager.repository.dental_service.DentalService;
-import pl.pingwit.pingwitdentalmanager.repository.doctor.Doctor;
-import pl.pingwit.pingwitdentalmanager.repository.patient.Patient;
+import pl.pingwit.pingwitdentalmanager.entity.AppointmentStatus;
+import pl.pingwit.pingwitdentalmanager.entity.DentalTreatment;
+import pl.pingwit.pingwitdentalmanager.entity.Doctor;
+import pl.pingwit.pingwitdentalmanager.entity.Patient;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 public class AppointmentDto {
     private Long id;
@@ -13,7 +14,19 @@ public class AppointmentDto {
     private AppointmentStatus appointmentStatus;
     private Patient patient;
     private Doctor doctor;
-    private DentalService dentalService;
+    private Set<DentalTreatment> dentalTreatment;
+
+    public AppointmentDto() {
+    }
+
+    public AppointmentDto(Long id, LocalDate date, AppointmentStatus appointmentStatus, Patient patient, Doctor doctor, Set<DentalTreatment> dentalTreatment) {
+        this.id = id;
+        this.date = date;
+        this.appointmentStatus = appointmentStatus;
+        this.patient = patient;
+        this.doctor = doctor;
+        this.dentalTreatment = dentalTreatment;
+    }
 
     public Long getId() {
         return id;
@@ -55,11 +68,11 @@ public class AppointmentDto {
         this.doctor = doctor;
     }
 
-    public DentalService getDentalService() {
-        return dentalService;
+    public Set<DentalTreatment> getDentalTreatment() {
+        return dentalTreatment;
     }
 
-    public void setDentalService(DentalService dentalService) {
-        this.dentalService = dentalService;
+    public void setDentalTreatment(Set<DentalTreatment> dentalTreatment) {
+        this.dentalTreatment = dentalTreatment;
     }
 }

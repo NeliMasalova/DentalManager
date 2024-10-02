@@ -3,6 +3,7 @@ package pl.pingwit.pingwitdentalmanager.converter;
 import org.springframework.stereotype.Component;
 import pl.pingwit.pingwitdentalmanager.dto.AppointmentDto;
 import pl.pingwit.pingwitdentalmanager.entity.Appointment;
+import pl.pingwit.pingwitdentalmanager.exceptionhandling.NotFoundException;
 import pl.pingwit.pingwitdentalmanager.repository.DentalTreatmentRepository;
 import pl.pingwit.pingwitdentalmanager.entity.Doctor;
 import pl.pingwit.pingwitdentalmanager.repository.DoctorRepository;
@@ -32,7 +33,6 @@ public class AppointmentConverter {
         dto.setAppointmentStatus(appointment.getAppointmentStatus());
         dto.setPatient(appointment.getPatient());
         dto.setDoctor(appointment.getDoctor());
-
         dto.setDentalTreatment(appointment.getDentalTreatments());
 
         return dto;
@@ -43,13 +43,13 @@ public class AppointmentConverter {
         appointment.setDate(inputDto.getDate());
         appointment.setAppointmentStatus(inputDto.getAppointmentStatus());
 
-        Patient patient = patientRepository.findById(inputDto.getPatient().getId()).orElseThrow();
-        Doctor doctor = doctorRepository.findById(inputDto.getDoctor().getId()).orElseThrow();
-
+        Patient patient = patientRepository.findById(inputDto.getPatient().getId()).
+                orElseThrow(()-> new NotFoundException("Patient with such id doesn't found. Please, try again."));
+        Doctor doctor = doctorRepository.findById(inputDto.getDoctor().getId()).
+                orElseThrow(()-> new NotFoundException("Patient with such id doesn't found. Please, try again."));
         Set<DentalTreatment> dentalTreatments = inputDto.getDentalTreatment().stream()
                 .map(treatmentDto -> dentalTreatmentRepository.findById(treatmentDto.getId()).orElseThrow())
                 .collect(Collectors.toSet());
-
         appointment.setPatient(patient);
         appointment.setDoctor(doctor);
         appointment.setDentalTreatments(dentalTreatments);
