@@ -1,32 +1,29 @@
-package pl.pingwit.pingwitdentalmanager.repository.patient;
+package pl.pingwit.pingwitdentalmanager.entity;
 
 import jakarta.persistence.*;
-import pl.pingwit.pingwitdentalmanager.repository.appointment.Appointment;
+//import pl.pingwit.pingwitdentalmanager.entity.Appointment;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "patient")
 public class Patient {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "patient_id_generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
     private Long id;
-    @Column (name = "name")
+    @Column(name = "name")
     private String name;
-    @Column (name = "surname")
+    @Column(name = "surname")
     private String surname;
-    @Column (name = "birthdate")
+    @Column(name = "birthdate")
     private LocalDate birthdate;
-    @Column (name = "email")
+    @Column(name = "email")
     private String email;
-    @Column (name = "phone")
+    @Column(name = "phone")
     private String phone;
-    @Column (name = "address")
+    @Column(name = "address")
     private String address;
-    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
-    private List<Appointment> appointments;
 
     public Patient() {
     }

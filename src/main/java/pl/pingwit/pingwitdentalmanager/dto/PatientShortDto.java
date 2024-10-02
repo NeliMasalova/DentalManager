@@ -1,20 +1,23 @@
-package pl.pingwit.pingwitdentalmanager.controller.patient;
+package pl.pingwit.pingwitdentalmanager.dto;
+
+import jakarta.persistence.Column;
 
 import java.time.LocalDate;
 
-public class PatientDto {
-    private Long id;
+public class PatientShortDto {
     private String name;
     private String surname;
     private LocalDate birthdate;
     private String phone;
 
-    public Long getId() {
-        return id;
+    public PatientShortDto() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public PatientShortDto(String name, String surname, LocalDate birthdate, String phone) {
+        this.name = name;
+        this.surname = surname;
+        this.birthdate = birthdate;
+        this.phone = phone;
     }
 
     public String getName() {
