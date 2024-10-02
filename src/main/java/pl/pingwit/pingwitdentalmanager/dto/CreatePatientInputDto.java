@@ -1,6 +1,5 @@
-package pl.pingwit.pingwitdentalmanager.controller.patient;
+package pl.pingwit.pingwitdentalmanager.dto;
 
-import jakarta.persistence.Column;
 
 import java.time.LocalDate;
 

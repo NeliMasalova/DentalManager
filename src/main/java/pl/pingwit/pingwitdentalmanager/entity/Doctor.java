@@ -1,4 +1,4 @@
-package pl.pingwit.pingwitdentalmanager.repository.doctor;
+package pl.pingwit.pingwitdentalmanager.entity;
 
 import jakarta.persistence.*;
 
@@ -13,12 +13,28 @@ public class Doctor {
     private String name;
     @Column(name = "surname")
     private String surname;
-    @Column(name = "speciality")
-    private String speciality;
+    @Column(name = "specialty")
+    private String specialty;
     @Column(name = "phone")
     private String phone;
     @Column(name = "rate")
     private Double rate;
+
+    public Doctor(String name, String surname, String phone, String specialty, Double rate) {
+    }
+
+    public Doctor() {
+
+    }
+
+    public Doctor(Long id, String name, String surname, String specialty, String phone, Double rate) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.specialty = specialty;
+        this.phone = phone;
+        this.rate = rate;
+    }
 
     public Long getId() {
         return id;
@@ -44,12 +60,12 @@ public class Doctor {
         this.surname = surname;
     }
 
-    public String getSpeciality() {
-        return speciality;
+    public String getSpecialty() {
+        return specialty;
     }
 
-    public void setSpeciality(String speciality) {
-        this.speciality = speciality;
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
     }
 
     public String getPhone() {
