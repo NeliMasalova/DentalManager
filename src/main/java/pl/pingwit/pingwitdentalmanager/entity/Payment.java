@@ -1,7 +1,6 @@
-package pl.pingwit.pingwitdentalmanager.repository.payment;
+package pl.pingwit.pingwitdentalmanager.entity;
 
 import jakarta.persistence.*;
-import pl.pingwit.pingwitdentalmanager.repository.appointment.Appointment;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,14 +15,31 @@ public class Payment {
 
     @Column(name = "name")
     private String name;
-    @Column(name = "appointment_id")
+    @ManyToOne
+    @JoinColumn(name = "appointment_id", referencedColumnName = "id")
     private Appointment appointment;
     @Column(name = "date")
     private LocalDate date;
+    @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private TypePayment typePayment;
     @Column(name = "amount")
     private BigDecimal amount;
+
+    public Payment() {
+    }
+
+    public Payment(Long id, String name, Appointment appointment, LocalDate date, TypePayment typePayment, BigDecimal amount) {
+        this.id = id;
+        this.name = name;
+        this.appointment = appointment;
+        this.date = date;
+        this.typePayment = typePayment;
+        this.amount = amount;
+    }
+
+    public Payment(String name, Appointment appointment, LocalDate date, TypePayment typePayment) {
+    }
 
     public Long getId() {
         return id;
@@ -45,7 +61,7 @@ public class Payment {
         return appointment;
     }
 
-    public void setAppointment(Appointment appointment) {
+    public void setAppointment(Appointment aAppointment) {
         this.appointment = appointment;
     }
 
